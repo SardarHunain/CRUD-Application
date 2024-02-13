@@ -2,9 +2,10 @@
 import { useState } from "react";
 import { Button } from "react-bootstrap";
 import axios from "axios";
+import { Navigate } from "react-router-dom";
 
 function CreateUser() {
-  
+    const [submitted, setSubmitted] = useState(false); // State to track form submission
     const [inputs,setInputs] = useState({
         name:"",
         email:"",
@@ -26,12 +27,17 @@ function CreateUser() {
                     'Content-Type': 'application/json'
                 }
             });
-            console.log("Data sent successfully");
+            setSubmitted(true); // Set submitted state to true after successful submission
+            alert("Data saved successfully");
+            
         } catch (error) {
             console.error("Error sending data:", error);
         }
     }
     
+    if (submitted) {
+        return <Navigate to="/" />; // Navigate to home screen if form is submitted
+      }
   
     return (
     <div>
