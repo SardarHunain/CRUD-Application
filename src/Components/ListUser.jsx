@@ -50,7 +50,7 @@ function ListUser() {
                 <td>{itm.email}</td>
                 <td>{itm.mobile}</td>
                 <td>
-                  <Link to={`/edit/${itm.id}`}>
+                  <Link to={`/user/edit/${itm.id}`}>
                     <FaEdit />
                   </Link>
                   <FaTrashAlt
