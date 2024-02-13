@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import axios from "axios";
 import { useParams, Navigate } from "react-router-dom"; // Import Navigate correctly
 import { Button } from "react-bootstrap";
@@ -23,7 +23,7 @@ function EditUser() {
           'Content-Type': 'application/json'
         }
       });
-      console.log("Data updated successfully");
+      alert("Data updated successfully");
       setSubmitted(true); // Set submitted state to true after successful submission
     } catch (error) {
       console.error("Error sending data:", error);
