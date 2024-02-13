@@ -1,43 +1,59 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
-import { useParams, Navigate } from "react-router-dom"; // Import Navigate correctly
+import { useParams, Navigate } from "react-router-dom";
 import { Button } from "react-bootstrap";
 
 function EditUser() {
   const { id } = useParams();
   const [inputs, setInputs] = useState({
-    
     name: "",
     email: "",
     mobile: "",
   });
-
-  const [submitted, setSubmitted] = useState(false); // State to track form submission
+  const [submitted, setSubmitted] = useState(false);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
-      const dataToSend = { ...inputs, id }; // Include id in the request body
-      await axios.put(`http://localhost/api/index.php/${id}`, JSON.stringify(dataToSend), {
-        headers: {
-          'Content-Type': 'application/json'
+      const dataToSend = { ...inputs, id };
+      await axios.put(
+        `http://localhost/api/index.php/${id}`,
+        JSON.stringify(dataToSend),
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
         }
-      });
+      );
       alert("Data updated successfully");
-      setSubmitted(true); // Set submitted state to true after successful submission
+      setSubmitted(true);
     } catch (error) {
       console.error("Error sending data:", error);
     }
   };
-  
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setInputs({ ...inputs, [name]: value });
   };
 
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const response = await axios.get(
+          `http://localhost/api/index.php/${id}`
+        );
+        console.log("Fetched user data:", response.data);
+        setInputs(response.data[0]); // Assuming data is the expected user object structure
+      } catch (error) {
+        console.error("Error fetching user:", error);
+      }
+    };
+    fetchUser();
+  }, [id]);
+
   if (submitted) {
-    return <Navigate to="/" />; // Navigate to home screen if form is submitted
+    return <Navigate to="/" />;
   }
 
   return (
@@ -51,7 +67,12 @@ function EditUser() {
                 <label>Name:</label>
               </th>
               <td>
-                <input type="text" name="name" onChange={handleChange} />
+                <input
+                  type="text"
+                  name="name"
+                  value={inputs.name}
+                  onChange={handleChange}
+                />
               </td>
             </tr>
             <tr>
@@ -59,7 +80,12 @@ function EditUser() {
                 <label>Email:</label>
               </th>
               <td>
-                <input type="text" name="email" onChange={handleChange} />
+                <input
+                  type="text"
+                  name="email"
+                  value={inputs.email}
+                  onChange={handleChange}
+                />
               </td>
             </tr>
             <tr>
@@ -67,7 +93,12 @@ function EditUser() {
                 <label>Mobile:</label>
               </th>
               <td>
-                <input type="text" name="mobile" onChange={handleChange} />
+                <input
+                  type="text"
+                  name="mobile"
+                  value={inputs.mobile}
+                  onChange={handleChange}
+                />
               </td>
             </tr>
             <tr>
